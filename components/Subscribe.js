@@ -1,31 +1,31 @@
-const SubscribeItem = ({classModifier, href, contents}) => (
+const SubscribeItem = ({ classModifier, href, contents }) => (
   <li className={`subscribe__link subscribe__link--${classModifier}`}>
-        <a
-          target="_blank"
-          href={href}
-          rel="noopener noreferrer"
-        >
-          {contents}
-        </a>
-      </li>
+    <a
+      target="_blank"
+      href={href}
+      rel="noopener noreferrer"
+    >
+      {contents}
+    </a>
+  </li>
 )
 
 const Subscribe = props => (
   <div className="subscribe">
     <ul className="subscribe__links">
-      <SubscribeItem 
-        contents='iTunes' 
-        classModifier="itunes" 
-        href="https://itunes.apple.com/ca/podcast/syntax-tasty-web-development-treats/id1253186678?mt=2" 
+      <SubscribeItem
+        contents='iTunes'
+        classModifier="itunes"
+        href="https://itunes.apple.com/ca/podcast/syntax-tasty-web-development-treats/id1253186678?mt=2"
       />
-      <SubscribeItem 
-        contents='Overcast' 
-        classModifier="overcast" 
+      <SubscribeItem
+        contents='Overcast'
+        classModifier="overcast"
         href="https://overcast.fm/itunes1253186678/syntax-tasty-web-development-treats"
       />
-      <SubscribeItem 
-        contents='Google Podcast' 
-        classModifier="google" 
+      <SubscribeItem
+        contents='Google Podcast'
+        classModifier="google"
         href="https://www.google.com/podcasts?feed=aHR0cHM6Ly9mZWVkLnN5bnRheC5mbS9yc3M%3D"
       />
       <SubscribeItem
