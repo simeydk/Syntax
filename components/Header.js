@@ -1,6 +1,41 @@
 import Subscribe from './Subscribe';
 import Link from 'next/link';
 
+const A = ({ children, ...props }) => (
+  <a
+    target="_blank"
+    rel="noopener noreferrer"
+    {...props} >{children}</a>
+)
+
+const Person = ({ name, twitterHandle, avatarSrc, avatarAlt, children }) => (
+  <div className="person">
+    <img src={avatarSrc} alt={avatarAlt} className="avatar" />
+    <h3>{name}</h3>
+    <A
+      href={`https://twitter.com/${twitterHandle}`}
+      className="person__social person__social--twitter"
+    >
+      @{twitterHandle}
+    </A>
+    {children}
+  </div>
+)
+
+const Wes = () => <Person
+  name='Wes Bos'
+  avatarSrc="/static/wes400x400.jpg"
+  avatarAlt="Wes Bos"
+  twitterHandle='wesbos'
+>
+  <p>
+    Full Stack JavaScript Developer. 
+    Creator of really good{' '}
+    <A href="https://wesbos.com/courses">web development courses</A>
+    . BBQ enthusiast.
+  </p>
+</Person>
+
 const Header = () => (
   <header className="header">
     <div className="header__left">
@@ -23,30 +58,8 @@ const Header = () => (
         </a>
       </div>
       <div className="people">
-        <div className="person">
-          <img src="/static/wes400x400.jpg" alt="Wes Bos" className="avatar" />
-          <h3>Wes Bos</h3>
-          <a
-            target="_blank"
-            href="https://twitter.com/wesbos"
-            className="person__social person__social--twitter"
-            rel="noopener noreferrer"
-          >
-            @wesbos
-          </a>
-          <p>
-            Full Stack JavaScript Developer. Creator of really good{' '}
-            <a
-              target="_blank"
-              href="https://wesbos.com/courses"
-              rel="noopener noreferrer"
-            >
-              web development courses
-            </a>
-            . BBQ enthusiast.
-          </p>
-        </div>
 
+        <Wes />
         <div className="person">
           <img
             src="https://avatars2.githubusercontent.com/u/669383?s=460&v=4"
