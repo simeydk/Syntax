@@ -13,7 +13,7 @@ export default class Player extends React.Component {
   constructor(props) {
     super(props);
 
-    let lastPlayed = 0;
+    let lastPlayed = this.props.startTime | null;
     let lastVolumePref = 1;
     let lastPlaybackRate = 1;
 
@@ -24,7 +24,7 @@ export default class Player extends React.Component {
       const lastVolume = localStorage.getItem(`lastVolumeSetting`);
       const lastPlayback = localStorage.getItem(`lastPlaybackSetting`);
 
-      if (lp) lastPlayed = JSON.parse(lp).lastPlayed;
+      if (lp && lastPlayed === null) lastPlayed = JSON.parse(lp).lastPlayed;
       if (lastVolume) lastVolumePref = JSON.parse(lastVolume).lastVolumePref;
       if (lastPlayback)
         lastPlaybackRate = JSON.parse(lastPlayback).lastPlaybackRate;
@@ -49,11 +49,11 @@ export default class Player extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { show } = this.props;
+    const { show, startTime } = this.props;
     const { currentTime, currentVolume, playbackRate } = this.state;
     if (show.number !== prevProps.show.number) {
       const lp = localStorage.getItem(`lastPlayed${show.number}`);
-      if (lp) {
+      if (lp && startTime === null) {
         const lastVolume = localStorage.getItem(`lastVolumeSetting`);
         const lastPlayback = localStorage.getItem(`lastPlaybackSetting`);
         const data = JSON.parse(lp);
