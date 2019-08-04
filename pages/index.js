@@ -8,6 +8,7 @@ import Player from '../components/Player';
 import Meta from '../components/meta';
 import Page from '../components/Page';
 import getBaseURL from '../lib/getBaseURL';
+import {timeStampToSeconds} from '../lib/parseTimeStamp'
 
 export default withRouter(
   class IndexPage extends React.Component {
@@ -21,10 +22,14 @@ export default withRouter(
       super();
       const currentShow =
         props.router.query.number || props.shows[0].displayNumber;
+      
+      const t = props.router.query.t
+      const startTime = (t === undefined) ? null : timeStampToSeconds(t)
 
       this.state = {
         currentShow,
         currentPlaying: currentShow,
+        startTime
       };
     }
 
@@ -63,7 +68,7 @@ export default withRouter(
           <Meta show={show} baseURL={baseURL} />
           <div className="wrapper">
             <main className="show-wrap" id="main" tabIndex="-1">
-              <Player show={current} startTime={23.10} />
+              <Player show={current} startTime={this.state.startTime} />
               <ShowList
                 shows={shows}
                 currentShow={currentShow}
