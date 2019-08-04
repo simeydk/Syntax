@@ -63,7 +63,7 @@ export default withRouter(
           <Meta show={show} baseURL={baseURL} />
           <div className="wrapper">
             <main className="show-wrap" id="main" tabIndex="-1">
-              <Player show={current} />
+              <Player show={current} startTime={23.10} />
               <ShowList
                 shows={shows}
                 currentShow={currentShow}

@@ -6,7 +6,8 @@ import VolumeBars from './VolumeBars';
 
 export default class Player extends React.Component {
   static propTypes = {
-    show: PropTypes.object.isRequired
+    show: PropTypes.object.isRequired,
+    startTime: PropTypes.number
   };
 
   constructor(props) {
@@ -233,7 +234,7 @@ export default class Player extends React.Component {
             />
           </div>
           <h3 className="player__title">
-            Playing: {show.displayNumber}: {show.title}
+            [{this.props.startTime || null}] Playing: {show.displayNumber}: {show.title}
           </h3>
           <div
             className="player__tooltip"
