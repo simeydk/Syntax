@@ -8,7 +8,7 @@ import Player from '../components/Player';
 import Meta from '../components/meta';
 import Page from '../components/Page';
 import getBaseURL from '../lib/getBaseURL';
-import {timeStampToSeconds} from '../lib/parseTimeStamp'
+import { timeStampToSeconds } from '../lib/parseTimeStamp'
 
 export default withRouter(
   class IndexPage extends React.Component {
@@ -22,7 +22,7 @@ export default withRouter(
       super();
       const currentShow =
         props.router.query.number || props.shows[0].displayNumber;
-      
+
       const t = props.router.query.t
       const startTime = (t === undefined) ? null : timeStampToSeconds(t)
 
@@ -75,6 +75,11 @@ export default withRouter(
                 currentPlaying={currentPlaying}
                 setCurrentPlaying={this.setCurrentPlaying}
               />
+              <h1>
+                <a href="?t=3m13s" >
+                  Jump to 3m13s
+                </a>
+              </h1>
               <ShowNotes
                 show={show}
                 setCurrentPlaying={this.setCurrentPlaying}

@@ -7,7 +7,8 @@ import VolumeBars from './VolumeBars';
 export default class Player extends React.Component {
   static propTypes = {
     show: PropTypes.object.isRequired,
-    startTime: PropTypes.number
+    startTime: PropTypes.number,
+    autoPlay: PropTypes.bool,
   };
 
   constructor(props) {
@@ -16,6 +17,7 @@ export default class Player extends React.Component {
     let lastPlayed = this.props.startTime | null;
     let lastVolumePref = 1;
     let lastPlaybackRate = 1;
+    let {autoPlay} = this.props
 
     // for Server Side Rendering
     if (typeof window !== 'undefined') {
@@ -32,7 +34,7 @@ export default class Player extends React.Component {
 
     this.state = {
       progressTime: 50,
-      playing: false,
+      playing: (autoPlay == true),
       duration: 0,
       currentTime: lastPlayed,
       currentVolume: lastVolumePref,
