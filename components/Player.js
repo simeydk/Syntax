@@ -6,7 +6,8 @@ import VolumeBars from './VolumeBars';
 
 export default class Player extends React.Component {
   static propTypes = {
-    show: PropTypes.object.isRequired
+    show: PropTypes.object.isRequired,
+    onPlayPause: PropTypes.func,
   };
 
   constructor(props) {
@@ -147,7 +148,7 @@ export default class Player extends React.Component {
   playPause = () => {
     this.setState({ playing: !this.audio.paused });
     const method = this.audio.paused ? 'add' : 'remove';
-    document.querySelector('.bars').classList[method]('bars--paused'); // 💩
+    this.props.onPlayPause(this.audio)
   };
 
   volume = e => {
