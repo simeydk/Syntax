@@ -26,6 +26,7 @@ export default withRouter(
         currentShow,
         currentPlaying: currentShow,
         isPlaying: false,
+        startTime: null,
       };
     }
 
@@ -53,7 +54,7 @@ export default withRouter(
 
     render() {
       const { shows = [], baseURL } = this.props;
-      const { currentShow, currentPlaying, isPlaying } = this.state;
+      const { currentShow, currentPlaying, isPlaying, startTime } = this.state;
       // Currently Shown shownotes
       const show =
         shows.find(showItem => showItem.displayNumber === currentShow) ||
@@ -68,7 +69,7 @@ export default withRouter(
           <Meta show={show} baseURL={baseURL} />
           <div className="wrapper">
             <main className="show-wrap" id="main" tabIndex="-1">
-              <Player show={current} onPlayPause={a => this.setIsPlaying(!a.paused)}/>
+              <Player show={current} onPlayPause={a => this.setIsPlaying(!a.paused)} startTime={startTime}/>
               <ShowList
                 shows={shows}
                 currentShow={currentShow}

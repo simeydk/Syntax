@@ -9,11 +9,13 @@ import upgradeLocalStorage from '../lib/upgrade-localstorage'
 export default class Player extends React.Component {
   static propTypes = {
     show: PropTypes.object.isRequired,
+    startTime: PropTypes.number,
     enableLocalStorage: PropTypes.bool,
     onPlayPause: PropTypes.func,
   };
 
   static defaultProps = {
+    startTime: null,
     enableLocalStorage: true,
   }
 
@@ -47,6 +49,8 @@ export default class Player extends React.Component {
 
     }
 
+    if (props.startTime !== null) initialState.currentTime = props.startTime
+
     initialState.timeWasLoaded = initialState.lastPlayed !== 0,
     this.state = initialState
   } // END Constructor
@@ -58,10 +62,10 @@ export default class Player extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (!this.props.enableLocalStorage) return
 
-    const { show } = this.props;
+    const { show, startTime } = this.props;
     const currentTimeLabel = `currentTime${show.number}`
-    if (show.number !== prevProps.show.number) { //show changed
-      const currentTime = ls[currentTimeLabel]
+    if ((show.number !== prevProps.show.number) || (startTime !== prevProps.startTime)) { //show changed
+      const currentTime = startTime !== null ? startTime : ls[currentTimeLabel]
       this.audio.currentTime = currentTime
       this.setState({currentTime})
       this.audio.play();
@@ -75,14 +79,14 @@ export default class Player extends React.Component {
 
   timeUpdate = e => {
     // console.log('Updating Time');
-    const { show } = this.props;
+    const { show, startTime } = this.props;
     const currentTimeLabel = `currentTime${show.number}`
 
     const { timeWasLoaded } = this.state;
     // Check if the user already had a curent time
     if (timeWasLoaded) {
       if (this.props.enableLocalStorage) {
-        e.currentTarget.currentTime = ls[currentTimeLabel]
+        e.currentTarget.currentTime = startTime !== null ? startTime : ls[currentTimeLabel]
       }
       this.setState({ timeWasLoaded: false });
     } else {
