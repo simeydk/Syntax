@@ -150,12 +150,12 @@ export default class Player extends React.Component {
     document.querySelector('.bars').classList[method]('bars--paused'); // 💩
   };
 
-  volume = e => {
-    this.audio.volume = e.currentTarget.value;
+  setVolume = volume => {
+    this.audio.volume = volume
     this.setState({
-      currentVolume: `${e.currentTarget.value}`
-    });
-  };
+      currentVolume: this.audio.volume
+    })
+  } 
 
   speedUp = () => {
     this.speed(0.25);
@@ -193,7 +193,8 @@ export default class Player extends React.Component {
       duration,
       showTooltip,
       tooltipPosition,
-      tooltipTime
+      tooltipTime,
+      currentVolume,
     } = this.state;
 
     return (
@@ -260,7 +261,7 @@ export default class Player extends React.Component {
             <p>LOUDNESS</p>
             <div className="player__inputs">
 
-              <VolumeBars volume={this.volume} />
+              <VolumeBars currentVolume={currentVolume} setVolume={this.setVolume} />
 
             </div>
           </div>
