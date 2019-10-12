@@ -10,6 +10,7 @@ export default class Player extends React.Component {
   static propTypes = {
     show: PropTypes.object.isRequired,
     enableLocalStorage: PropTypes.bool,
+    onPlayPause: PropTypes.func,
   };
 
   static defaultProps = {
@@ -132,8 +133,7 @@ export default class Player extends React.Component {
 
   playPause = () => {
     this.setState({ playing: !this.audio.paused });
-    const method = this.audio.paused ? 'add' : 'remove';
-    document.querySelector('.bars').classList[method]('bars--paused'); // 💩
+    this.props.onPlayPause(this.audio)
   };
 
   volume = e => {
