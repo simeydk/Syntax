@@ -264,6 +264,7 @@ export default class Player extends React.Component {
           onVolumeChange={this.volumeUpdate}
           onLoadedMetadata={this.groupUpdates}
           src={show.url}
+          autoPlay={playing}
         />
       </div>
     );

@@ -8,6 +8,14 @@ import Player from '../components/Player';
 import Meta from '../components/meta';
 import Page from '../components/Page';
 import getBaseURL from '../lib/getBaseURL';
+import getHashParams from '../lib/getHashParams';
+
+function hashToStateMapper(hashParams, applyTo = {}) {
+  if(hashParams.playingShow) applyTo.currentPlaying = hashParams.playingShow
+  if(hashParams.startTime) applyTo.startTime = hashParams.startTime
+  if(hashParams.autoPlay) applyTo.isPlaying = hashParams.autoPlay === true
+  return applyTo
+}
 
 export default withRouter(
   class IndexPage extends React.Component {
@@ -19,17 +27,41 @@ export default withRouter(
 
     constructor(props) {
       super();
-      const currentShow =
-        props.router.query.number || props.shows[0].displayNumber;
 
+      const hashParams = typeof window === undefined ? {} : getHashParams()
+      const currentShow = props.router.query.number || props.shows[0].displayNumber;
+      const currentPlaying = hashParams.playingShow || currentShow;
+      const startTime = hashParams.startTime || null;
+      const isPlaying = hashParams.autoPlay !== undefined;
       this.state = {
         currentShow,
-        currentPlaying: currentShow,
-        isPlaying: false,
-        startTime: null,
+        currentPlaying,
+        isPlaying,
+        startTime,
       };
+
+      this.onHashChange = this.onHashChange.bind(this) 
+
     }
 
+    onHashChange() {
+      const hashParams = getHashParams()
+      const mapped = hashToStateMapper(hashParams)
+      console.log(hashParams, mapped)
+      this.setState(mapped)
+    }
+
+    componentDidMount() {
+      if (typeof window !== undefined) {
+        window.addEventListener('hashchange',this.onHashChange)
+      }
+    }
+    componentWillUnmount() {
+      if (typeof window !== undefined) {
+        window.removeEventListener('hashchange',this.onHashChange)
+      }
+    }
+    
     static async getInitialProps({ req }) {
       const baseURL = getBaseURL(req);
       const { data: shows } = await axios.get(`${baseURL}/api/shows`);
@@ -43,9 +75,9 @@ export default withRouter(
       }
     }
 
-    setCurrentPlaying = (currentPlaying) => {
+    setCurrentPlaying = (currentPlaying, startTime = null) => {
       console.log('Setting current playing');
-      this.setState({ currentPlaying });
+      this.setState({ currentPlaying, startTime });
     };
 
     setIsPlaying = (isPlaying) => {
