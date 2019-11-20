@@ -52,7 +52,15 @@ export default withRouter(
     }
 
     render() {
-      const { shows = [], baseURL } = this.props;
+      const { shows = [], baseURL, router } = this.props;
+      const startTime = this.props.router.query.t
+
+
+      const autoPlay =
+        router.query.autoPlay !== null
+          ? !(router.query.autoPlay === 'false')
+          : typeof startTime === 'number';
+
       const { currentShow, currentPlaying, isPlaying } = this.state;
       // Currently Shown shownotes
       const show =
@@ -67,8 +75,9 @@ export default withRouter(
         <Page>
           <Meta show={show} baseURL={baseURL} />
           <div className="wrapper">
+            <pre style={{display:"block",background:"white", "max-height":"100px","overflow":"scroll"}}>{JSON.stringify(this.props,null,2)}</pre>
             <main className="show-wrap" id="main" tabIndex="-1">
-              <Player show={current} onPlayPause={a => this.setIsPlaying(!a.paused)}/>
+              <Player show={current} onPlayPause={a => this.setIsPlaying(!a.paused)} startTime={startTime} autoPlay={autoPlay}/>
               <ShowList
                 shows={shows}
                 currentShow={currentShow}
