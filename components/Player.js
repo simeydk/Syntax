@@ -5,9 +5,12 @@ import formatTime from '../lib/formatTime';
 import VolumeBars from './VolumeBars';
 
 export default class Player extends React.Component {
+  
   static propTypes = {
     show: PropTypes.object.isRequired,
     onPlayPause: PropTypes.func,
+    startTime: PropTypes.number,
+    autoPlay: PropTypes.bool,
   };
 
   constructor(props) {
@@ -44,12 +47,16 @@ export default class Player extends React.Component {
     };
   } // END Constructor
 
+  componentDidMount() {
+    this.audio.currentTime = this.props.startTime || 0;
+  }
+
   componentWillUpdate(nextProps, nextState) { //eslint-disable-line
     this.audio.playbackRate = nextState.playbackRate;
   }
 
   componentDidUpdate(prevProps, prevState) { //eslint-disable-line
-    const { show } = this.props;
+    const { show, startTime } = this.props; 
     const { currentTime, currentVolume, playbackRate } = this.state;
     if (show.number !== prevProps.show.number) {
       const lp = localStorage.getItem(`lastPlayed${show.number}`);
@@ -60,17 +67,23 @@ export default class Player extends React.Component {
         const data2 = JSON.parse(lastVolume);
         const data3 = JSON.parse(lastPlayback);
         // eslint-disable-next-line
+        const newTime = (typeof startTime === 'number') ? startTime : data.lastPlayed 
         this.setState({
-          currentTime: data.lastPlayed,
+          currentTime: newTime,
           currentVolume: data2.lastVolumePref,
           playbackRate: data3.lastPlaybackRate,
         });
-        this.audio.currentTime = data.lastPlayed;
+        this.audio.currentTime = newTime;
         this.audio.volume = data2.lastVolumePref;
         this.audio.playbackRate = data3.lastPlaybackRate;
+      } else {
+        this.audio.currentTime = startTime || 0;
       }
-      this.audio.play();
+      if(this.props.autoPlay) this.audio.play();
     } else {
+      if (prevProps.startTime !== this.props.startTime) {
+        this.audio.currentTime = this.props.startTime || 0;
+      }
       localStorage.setItem(
         `lastPlayed${show.number}`,
         JSON.stringify({ lastPlayed: currentTime })
@@ -184,7 +197,7 @@ export default class Player extends React.Component {
   };
 
   render() {
-    const { show } = this.props;
+    const { show, autoPlay } = this.props;
     const {
       playing,
       playbackRate,
@@ -271,6 +284,7 @@ export default class Player extends React.Component {
           onTimeUpdate={this.timeUpdate}
           onVolumeChange={this.volumeUpdate}
           onLoadedMetadata={this.groupUpdates}
+          autoPlay = {autoPlay}
           src={show.url}
         />
         {/* eslint-enable */}
