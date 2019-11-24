@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import formatTime from '../lib/formatTime';
 import VolumeBars from './VolumeBars';
+import Progressbar from './Progressbar';
 
 export default class Player extends React.Component {
   static propTypes = {
@@ -31,16 +32,12 @@ export default class Player extends React.Component {
     }
 
     this.state = {
-      progressTime: 50,
       playing: false,
       duration: 0,
       currentTime: lastPlayed,
       currentVolume: lastVolumePref,
       playbackRate: lastPlaybackRate,
       timeWasLoaded: lastPlayed !== 0,
-      showTooltip: false,
-      tooltipPosition: 0,
-      tooltipTime: '0:00',
     };
   } // END Constructor
 
@@ -101,9 +98,7 @@ export default class Player extends React.Component {
     } else {
       const { currentTime = 0, duration = 0 } = e.currentTarget;
 
-      const progressTime = (currentTime / duration) * 100;
-      if (Number.isNaN(progressTime)) return;
-      this.setState({ progressTime, currentTime, duration });
+      this.setState({ currentTime, duration });
     }
   };
 
@@ -128,21 +123,6 @@ export default class Player extends React.Component {
     const { playing } = this.state;
     const method = playing ? 'pause' : 'play';
     this.audio[method]();
-  };
-
-  scrubTime = eventData =>
-    (eventData.nativeEvent.offsetX / this.progress.offsetWidth) *
-    this.audio.duration;
-
-  scrub = e => {
-    this.audio.currentTime = this.scrubTime(e);
-  };
-
-  seekTime = e => {
-    this.setState({
-      tooltipPosition: e.nativeEvent.offsetX,
-      tooltipTime: formatTime(this.scrubTime(e)),
-    });
   };
 
   playPause = () => {
@@ -185,16 +165,7 @@ export default class Player extends React.Component {
 
   render() {
     const { show } = this.props;
-    const {
-      playing,
-      playbackRate,
-      progressTime,
-      currentTime,
-      duration,
-      showTooltip,
-      tooltipPosition,
-      tooltipTime,
-    } = this.state;
+    const { playing, playbackRate, currentTime, duration } = this.state;
 
     return (
       <div className="player">
@@ -212,38 +183,14 @@ export default class Player extends React.Component {
         </div>
 
         <div className="player__section player__section--middle">
-          {/* eslint-disable */}
-          <div
-            className="progress"
-            onClick={this.scrub}
-            onMouseMove={this.seekTime}
-            onMouseEnter={() => {
-              this.setState({ showTooltip: true });
-            }}
-            onMouseLeave={() => {
-              this.setState({ showTooltip: false });
-            }}
-            ref={x => (this.progress = x)}
-          >
-            {/* eslint-enable */}
-
-            <div
-              className="progress__time"
-              style={{ width: `${progressTime}%` }}
-            />
-          </div>
+          <Progressbar
+            currentTime={currentTime}
+            duration={duration}
+            setCurrentTime={newTime => (this.audio.currentTime = newTime)}
+          />
           <h3 className="player__title">
             Playing: {show.displayNumber}: {show.title}
           </h3>
-          <div
-            className="player__tooltip"
-            style={{
-              left: `${tooltipPosition}px`,
-              opacity: `${showTooltip ? '1' : '0'}`,
-            }}
-          >
-            {tooltipTime}
-          </div>
         </div>
 
         <div className="player__section player__section--right">
