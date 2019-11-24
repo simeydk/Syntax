@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import formatTime from '../lib/formatTime';
 import VolumeBars from './VolumeBars';
+import Progressbar from './Progressbar';
 
 export default class Player extends React.Component {
   static propTypes = {
@@ -212,35 +213,7 @@ export default class Player extends React.Component {
         </div>
 
         <div className="player__section player__section--middle">
-          {/* eslint-disable */}
-          <div
-            className="progress"
-            onClick={this.scrub}
-            onMouseMove={this.seekTime}
-            onMouseEnter={() => {
-              this.setState({ showTooltip: true });
-            }}
-            onMouseLeave={() => {
-              this.setState({ showTooltip: false });
-            }}
-            ref={x => (this.progress = x)}
-          >
-            {/* eslint-enable */}
-
-            <div
-              className="progress__time"
-              style={{ width: `${progressTime}%` }}
-            />
-          </div>
-          <div
-            className="player__tooltip"
-            style={{
-              left: `${tooltipPosition}px`,
-              opacity: `${showTooltip ? '1' : '0'}`,
-            }}
-          >
-            {tooltipTime}
-          </div>
+          <Progressbar currentTime={currentTime} duration={duration} setCurrentTime={newTime => this.setState({currentTime:newTime})} />
           <h3 className="player__title">
             Playing: {show.displayNumber}: {show.title}
           </h3>
