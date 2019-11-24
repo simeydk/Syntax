@@ -232,9 +232,6 @@ export default class Player extends React.Component {
               style={{ width: `${progressTime}%` }}
             />
           </div>
-          <h3 className="player__title">
-            Playing: {show.displayNumber}: {show.title}
-          </h3>
           <div
             className="player__tooltip"
             style={{
@@ -244,6 +241,9 @@ export default class Player extends React.Component {
           >
             {tooltipTime}
           </div>
+          <h3 className="player__title">
+            Playing: {show.displayNumber}: {show.title}
+          </h3>
         </div>
 
         <div className="player__section player__section--right">
