@@ -130,12 +130,12 @@ export default class Player extends React.Component {
     this.props.onPlayPause(this.audio)
   };
 
-  volume = e => {
-    this.audio.volume = e.currentTarget.value;
+  setVolume = volume => {
+    this.audio.volume = volume
     this.setState({
-      currentVolume: `${e.currentTarget.value}`,
-    });
-  };
+      currentVolume: this.audio.volume
+    })
+  } 
 
   speedUp = () => {
     this.speed(0.25);
@@ -165,7 +165,13 @@ export default class Player extends React.Component {
 
   render() {
     const { show } = this.props;
-    const { playing, playbackRate, currentTime, duration } = this.state;
+    const {
+      playing,
+      playbackRate,
+      currentTime,
+      duration,
+      currentVolume,
+    } = this.state;
 
     return (
       <div className="player">
@@ -206,7 +212,9 @@ export default class Player extends React.Component {
           <div className="player__volume">
             <p>LOUDNESS</p>
             <div className="player__inputs">
-              <VolumeBars volume={this.volume} />
+
+              <VolumeBars currentVolume={currentVolume} setVolume={this.setVolume} />
+
             </div>
           </div>
         </div>
