@@ -12,7 +12,7 @@ export default function Progressbar({ currentTime, duration, setCurrentTime }) {
   const tooltipTimeS = (tooltipPosition / totalWidth) * duration;
   const tooltipTime = formatTime(tooltipTimeS);
 
-  {/* eslint-disable */ }
+  /* eslint-disable */ 
   return (<Fragment>
     <div
       className="progress"
@@ -22,7 +22,7 @@ export default function Progressbar({ currentTime, duration, setCurrentTime }) {
       onMouseLeave={() => setTooltipVisible(false)}
       ref={progress}
     >
-      {/* eslint-enable */}
+      
 
         <div className="progress__time" style={{ width: `${width}%` }} />
       </div>
@@ -37,6 +37,7 @@ export default function Progressbar({ currentTime, duration, setCurrentTime }) {
       </div>
     </Fragment>
   );
+  /* eslint-enable */
 }
 
 Progressbar.propTypes = {
